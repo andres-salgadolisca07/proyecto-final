@@ -28,7 +28,6 @@ return new class extends Migration
             $table->date('plazo_respuesta')->nullable();
             $table->timestamps();
             $table->foreignId('dependencia_id')->references('id')->on('dependencias');
-            $table->foreignId('opcion_id')->references('id')->on('opciones');
             $table->foreignId('estados_id')->references('id')->on('estados');
 
         });

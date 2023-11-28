@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
             UserSeeder::class,
             DependenciaSeeder::class,
             EstadoSeeder::class,
-            OpcionSeeder::class
         ]);
     }
 }

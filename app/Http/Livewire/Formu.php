@@ -4,7 +4,6 @@ namespace App\Http\Livewire;
 
 use App\Models\Dependencia;
 use App\Models\Estado;
-use App\Models\Opcion;
 use App\Models\Solicitud;
 use Livewire\Component;
 use Livewire\WithFileUploads;
@@ -16,9 +15,8 @@ use Illuminate\Validation\ValidationException;
 class Formu extends Component
 {
     use WithFileUploads;
-public $opciones;
 public $estados_id;
-public $user,$tipo_p,$nom_empresa,$tipo_solicitud,$dependencia_id,$opcion_id,$metodo_respuesta,$solicitud,$metodo_correo=false,$metodo_presencial=false,$plazo_respuesta,$documento;
+public $user,$tipo_p,$nom_empresa,$tipo_solicitud,$dependencia_id,$metodo_respuesta,$solicitud,$metodo_correo=false,$metodo_presencial=false,$plazo_respuesta,$documento;
 protected $rules = [ 'user.name' => 'required|string','user.iden' => 'required|number','user.email' => 'required|email','user.tel' => 'required|number' ];
 
 public function mount(){
@@ -30,7 +28,7 @@ public function mount(){
     public function render()
     {
         $dependencias = Dependencia::pluck('nombres', 'id');
-        $this->opciones = Opcion::where('dependencia_id', $this->dependencia_id)->pluck('nombres', 'id');
+
 
 
         return view('livewire.formu',compact('dependencias'));
@@ -49,7 +47,6 @@ public function mount(){
                 //'tipo_p' => 'required',
                 //'nom_empresa' => 'required',
                 //'dependencia_id' => 'required',
-                //'opcion_id' => 'required',
                 //'solicitud' => 'required',
                 'user.iden' => 'required',
                 'user.tel' => 'required',
@@ -67,7 +64,6 @@ public function mount(){
                 $tipo_p = $this->tipo_p;
                 $nom_empresa = $this->nom_empresa;
                 $dependencia_id = $this->dependencia_id;
-                $opcion_id = $this->opcion_id;
                 $soli = $this->solicitud;
                 $iden = $this->user['iden'];
                 $tel = $this->user['tel'];
@@ -79,7 +75,7 @@ public function mount(){
                 $solicitud->tipo_p = $tipo_p;
                 $solicitud->nom_empresa = $nom_empresa;
                 $solicitud->dependencia_id = $dependencia_id;
-                $solicitud->opcion_id = $opcion_id;
+
                 $solicitud->solicitud = $soli;
                 $solicitud->iden = $iden;
                 $solicitud->tel = $tel;
@@ -89,7 +85,7 @@ public function mount(){
             // Guardar el modelo Solicitud en la base de datos
              //  dd($solicitud);
                 $solicitud->save();
-                $solicitud->makeHidden(['opcion', 'dependencia', 'estado']);
+                $solicitud->makeHidden([ 'dependencia', 'estado']);
                 // Convertir el modelo a JSON
                 $solicitudJson = $solicitud->toJson();
              // Restablecer los valores del formulario
