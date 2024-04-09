@@ -40,6 +40,32 @@ public function mount(){
             $this->nom_empresa='';
         }
     }
+    public function tipoSolicitudChanged($tipo_solicitud)
+    {
+      
+        // Cambiar el plazo de respuesta según el tipo de solicitud seleccionado
+        switch ($tipo_solicitud) {
+            
+            case 'P':
+            case 'Q':
+            case 'E':
+            case 'S':
+                $this->plazo_respuesta = '16';
+                break;
+            case 'I':
+                $this->plazo_respuesta = 'no tiene tiempo'; // No hay tiempo definido para informativa
+                break;
+            case 'D':
+            case 'T':
+            case 'QU':
+                $this->plazo_respuesta = '2';
+                break;
+            default:
+                $this->plazo_respuesta = 'no tiene tiempo';
+        }
+    }
+
+
     public function register() {
         try {
             // Validar los datos ingresados
@@ -95,7 +121,10 @@ public function mount(){
              // Restablecer los valores del formulario
                 //$this->resetform();
             // Mostrar un mensaje de éxito
+            \Auth::guard('web')->logout();
+
                 session()->flash('success', 'Registro exitoso.');
+                return redirect()->route('welcome');
                 }
                 catch (ValidationException $e){
              // Capturar los errores de validación y mostrarlos si es necesario

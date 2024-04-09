@@ -7,7 +7,7 @@ background-size: cover; ">
                 <div class="card">
                     <div class="card-body">
                         <div>
-                            <h5 class="card-title">Bienvenido,Estas Realizando El Proceso De Encuesta De TU PQRSID</h5>
+                            <h5 class="card-title">Bienvenido,Estas Realizando h El Proceso De Encuesta De TU PQRSID</h5>
 
                         </div>
                         <div class="form">

@@ -14,17 +14,25 @@ background-size: cover; ">
 
                             <form wire:submit.prevent="register">
                                 <div class="row">
-
+                                    @if (session()->has('success'))
+                                    <div class="alert alert-success">
+                                        {{ session('success') }}
+                                    </div>
+                                @endif
                                     <div class="col-md-6">
                                         <div class="mb-3">
                                             <label for="name" class="form-label">Nombre:</label>
                                             <input type="text" id="name" wire:model="user.name"
                                                 class="form-control">
+                                                @error('user.name') <span class="error">{{ $message }}</span> @enderror
                                         </div>
+                                        
                                         <div class="mb-3">
                                             <label for="email" class="form-label">Email:</label>
                                             <input type="email" id="email" wire:model="user.email"
                                                 class="form-control">
+                                                @error('user.email') <span class="error">{{ $message }}</span> @enderror
+    
                                         </div>
                                         <div class="mb-3">
                                             <label for="tipo_p" class="form-label">Tipo De Persona</label>
@@ -34,8 +42,10 @@ background-size: cover; ">
                                                 <option value="natural">Persona Natural</option>
                                                 <option value="juridica">Persona Juridica</option>
                                                 <!-- Opciones para el select -->
+           
                                             </select>
-
+                                            @error('tipo_p') <span class="error">{{ $message }}</span> @enderror
+    
                                         </div>
                                         @if ($tipo_p === 'juridica')
                                             <div class="mb-3">
@@ -43,7 +53,8 @@ background-size: cover; ">
                                                     empresa:</label>
                                                 <input type="text" id="nom_empresa" wire:model="nom_empresa"
                                                     class="form-control"@if ($tipo_p === 'natural') style="display: none" @endif>
-                                            </div>
+                                            
+                                                </div>
                                         @endif
                                         <div class="mb-3">
                                             <label for="dependencia_id" class="form-label">Dependencia:</label>
@@ -53,7 +64,10 @@ background-size: cover; ">
                                                 @foreach ($dependencias as $id => $nombres)
                                                     <option value="{{ $id }}">{{ $nombres }}</option>
                                                 @endforeach
+                                                
                                             </select>
+                                            @error('dependencia_id') <span class="error">{{ $message }}</span> @enderror
+    
                                         </div>
 
                                         @if ($opciones)
@@ -67,6 +81,8 @@ background-size: cover; ">
                                                     @endforeach
 
                                                 </select>
+                                                @error('opcion_id') <span class="error">{{ $message }}</span> @enderror
+   
                                             </div>
                                         @endif
 
@@ -74,6 +90,8 @@ background-size: cover; ">
                                         <div class="mb-3">
                                             <label for="solicitud" class="form-label">Solicitud:</label>
                                             <textarea id="solicitud" wire:model="solicitud" class="form-control"></textarea>
+                                            @error('solicitud') <span class="error">{{ $message }}</span> @enderror
+   
                                         </div>
 
                                     </div>
@@ -84,17 +102,21 @@ background-size: cover; ">
                                             <label for="iden" class="form-label">Identificación:</label>
                                             <input type="number" id="iden" wire:model="user.iden"
                                                 class="form-control">
+                                                @error('user.iden') <span class="error">{{ $message }}</span> @enderror
+   
                                         </div>
                                         <div class="mb-3">
                                             <label for="tel" class="form-label">Teléfono:</label>
                                             <input type="number" id="tel" wire:model="user.tel"
                                                 class="form-control">
+                                                @error('user.tel') <span class="error">{{ $message }}</span> @enderror
+    
                                         </div>
                                         <div class="mb-3">
                                             <label for="tipo_solicitud" class="form-label">Tipo de
                                                 solicitud:</label>
                                             <select id="tipo_solicitud" wire:model="tipo_solicitud"
-                                                class="form-control">
+                                                class="form-control" wire:change="tipoSolicitudChanged($event.target.value)">
                                                 <option value="">Seleccionar</option>
                                                 <option value="P">Peticion</option>
                                                 <option value="Q">Quejas</option>
@@ -102,8 +124,11 @@ background-size: cover; ">
                                                 <option value="S">Sugerencias</option>
                                                 <option value="I">Informativas</option>
                                                 <option value="D">Denuncias</option>
+                                                <option value="QU">Querella</option>
 
                                             </select>
+                                            @error('tipo_solicitud') <span class="error">{{ $message }}</span> @enderror
+
                                         </div>
                                         <div class="mb-3">
                                             <label class="form-label">Metodo De Respuesta:</label>
@@ -127,13 +152,17 @@ background-size: cover; ">
                                             <input type="file" id="documento" wire:model="documento"
                                                 class="form-control">
                                         </div>
+                                        @if ($tipo_solicitud)
+                                        
                                         <div class="mb-3">
-                                            <label for="plazo_respuesta" class="form-label">Plazo de
-                                                respuesta:</label>
-                                            <input type="text" id="plazo_respuesta" wire:model="plazo_respuesta"
-                                                class="form-control">
+                                            <label for="plazo_respuesta" class="form-label">Plazo de respuesta:</label>
+                                            <input type="text" id="plazo_respuesta" value="{{ $plazo_respuesta }}" class="form-control" wire:model="plazo_respuesta" readonly>
                                         </div>
-
+                                        
+                                    @endif
+                                        
+                                        
+                                        
                                     </div>
 
                                     <button class="btn btn-primary">Enviar</button>

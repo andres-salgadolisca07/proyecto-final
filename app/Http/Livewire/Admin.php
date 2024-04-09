@@ -5,10 +5,13 @@ namespace App\Http\Livewire;
 use App\Models\Dependencia;
 use App\Models\Opcion;
 use App\Models\Solicitud;
+use App\Exports\SolicitudExport;
 use Illuminate\Support\Facades\Validator;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Illuminate\Validation\ValidationException;
+use Maatwebsite\Excel\Facades\Excel;
+
 
 class Admin extends Component
 {
@@ -17,7 +20,10 @@ class Admin extends Component
     public $estados_id,$buscador,$selected_id;
     public $user,$tipo_p,$nom_empresa,$tipo_solicitud,$dependencia_id,$opcion_id,$metodo_respuesta,$solicitud,$metodo_correo=false,$metodo_presencial=false,$plazo_respuesta,$documento;
     protected $rules = [ 'user.name' => 'required|string','user.iden' => 'required|number','user.email' => 'required|email','user.tel' => 'required|number' ];
-
+    public $fecha_inicio;
+    public $fecha_fin;
+    public $filtro_tipo_solicitud;
+    public $filtro_dependencia_id;
     public $opciones;
 
     public function render()
@@ -47,6 +53,17 @@ class Admin extends Component
             ->orWhere('estados.nombre','LIKE',$buscador)
             ->orWhere('dependencias.nombres','LIKE',$buscador)
             ->orWhere('opciones.nombres','LIKE',$buscador);
+        }) ->when($this->fecha_inicio, function ($query, $fecha_inicio) {
+            $query->whereDate('created_at', '>=', $fecha_inicio);
+        })
+        ->when($this->fecha_fin, function ($query, $fecha_fin) {
+            $query->whereDate('created_at', '<=', $fecha_fin);
+        })
+        ->when($this->filtro_tipo_solicitud, function ($query, $filtro_tipo_solicitud) {
+            $query->where('solicitudes.tipo_solicitud', $filtro_tipo_solicitud);
+        })
+        ->when($this->filtro_dependencia_id, function ($query, $filtro_dependencia_id) {
+            $query->where('solicitudes.dependencia_id', $filtro_dependencia_id);
         })->paginate(10);
 
 
@@ -201,8 +218,35 @@ class Admin extends Component
             Solicitud::where('id', $id)->delete();
         }
     }
-   /*  public function exportarExcel()
+    public function exportarExcel()
     {
-        return Excel::download(new SolicitudsExport(), 'solicituds.xlsx');
-    } */
+        $solicitudes = Solicitud::join('estados', 'estados.id', '=', 'solicitudes.estados_id')
+            ->join('dependencias', 'dependencias.id', '=', 'solicitudes.dependencia_id')
+            ->join('opciones', 'opciones.id', '=', 'solicitudes.opcion_id')
+            ->select('solicitudes.*', 'estados.nombre as esta', 'dependencias.nombres as depe', 'opciones.nombres as opci')
+            ->where(function ($query) {
+                $query->where('solicitudes.name', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.iden', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.email', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.tel', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.tipo_p', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.nom_empresa', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.tipo_solicitud', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.solicitud', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.documento', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.metodo_respuesta', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.respuesta', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('solicitudes.plazo_respuesta', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('estados.nombre', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('dependencias.nombres', 'LIKE', '%' . $this->buscador . '%')
+                    ->orWhere('opciones.nombres', 'LIKE', '%' . $this->buscador . '%');
+            })
+            ->whereBetween('created_at', [$this->fecha_inicio, $this->fecha_fin])
+            ->where('solicitudes.tipo_solicitud', $this->filtro_tipo_solicitud)
+            ->where('solicitudes.dependencia_id', $this->filtro_dependencia_id)
+            ->get();
+    
+        return Excel::download(new SolicitudExport($solicitudes), 'solicitudes.xlsx');
+    }
+    
 }

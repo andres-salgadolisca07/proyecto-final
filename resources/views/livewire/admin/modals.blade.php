@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="row">
-
+                        
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nombre:</label>

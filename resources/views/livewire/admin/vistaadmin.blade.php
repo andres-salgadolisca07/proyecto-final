@@ -5,27 +5,59 @@
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div class="float-left">
-                                <h4><i class="fab fa-laravel text-info"></i>
-                                    Tabla de Solicitudes De PQRSID </h4>
-                            </div>
+                        <div class="d-flex justify-content-between align-items-center">
                             <div>
-                                <button wire:click="exportarExcel" class="btn btn-primary">Exportar a Excel</button>
+                                <h4><i class="fab fa-laravel text-info"></i> Tabla de Solicitudes De PQRSID </h4>
                             </div>
-                            @if (session()->has('message'))
-                                <div wire:poll.4s class="btn btn-sm btn-success"
-                                    style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} </div>
-                            @endif
-                            <div>
-                                <input wire:model='buscador' type="text" class="form-control" name="search"
-                                    id="search" placeholder="Buscar Solicitud">
+                            <div class="d-flex align-items-center">
+                                <button wire:click="exportarExcel" class="btn btn-primary me-2">Exportar a Excel</button>
+                                @if (session()->has('message'))
+                                    <div wire:poll.4s class="btn btn-sm btn-success">{{ session('message') }}</div>
+                                @endif
                             </div>
-                            <div class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#createDataModal">
-                                <i class="fa fa-plus"></i> Agregar Solicitudes
+                        </div>
+                        <div class="mt-3">
+                            <div class="row g-2">
+                                <div class="col-md-3">
+                                    <label for="fecha_inicio">Fecha Inicio:</label>
+                                    <input type="date" id="fecha_inicio" wire:model="fecha_inicio" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="fecha_fin">Fecha Fin:</label>
+                                    <input type="date" id="fecha_fin" wire:model="fecha_fin" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="filtro_tipo_solicitud">Tipo de Solicitud:</label>
+                                    <select id="filtro_tipo_solicitud" wire:model="filtro_tipo_solicitud" class="form-control">
+                                        <option value="">Seleccionar</option>
+                                        <option value="P">Peticion</option>
+                                        <option value="Q">Quejas</option>
+                                        <option value="R">Reclamos</option>
+                                        <option value="S">Sugerencias</option>
+                                        <option value="I">Informativas</option>
+                                        <option value="D">Denuncias</option>
+                                        <option value="QU">Querella</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="filtro_dependencia_id">Dependencia:</label>
+                                    <select id="filtro_dependencia_id" wire:model="filtro_dependencia_id" class="form-control">
+                                        <option value="">Seleccionar</option>
+                                        @foreach ($dependencias as $id => $nombre)
+                                            <option value="{{ $id }}">{{ $nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="mt-2">
+                                <!--<button type="submit" class="btn btn-primary">Filtrar</button>-->
+                                <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#createDataModal">
+                                    <i class="fa fa-plus"></i> Agregar Solicitudes
+                                </button>
                             </div>
                         </div>
                     </div>
+                    
 
 
 
@@ -39,18 +71,18 @@
                                         <td>#</td>
                                         <th>Nombres</th>
                                         <th>Documento</th>
-                                        <th>Correp</th>
-                                        <th>Telefono</th>
-                                        <th>tipo Persona</th>
+                                        <th>Correo</th>
+                                        <th>Teléfono</th>
+                                        <th>Tipo de Persona</th>
                                         <th>Nombre Empresa</th>
                                         <th>Tipo De Solicitud</th>
                                         <th>Solicitud</th>
                                         <th>Documento</th>
-                                        <th>Metodo De Respuesta</th>
+                                        <th>Método De Respuesta</th>
                                         <th>Respuesta</th>
                                         <th>Plazo Respuesta</th>
                                         <th>Dependencia</th>
-                                        <th>Opcion De Solicitud</th>
+                                        <th>Opción De Solicitud</th>
                                         <th>Estado Solicitud</th>
 
                                         <td>ACCIONES</td>
@@ -70,7 +102,7 @@
                                             <td>{{ $solicitu->tipo_solicitud }}</td>
                                             <td>{{ $solicitu->solicitud }}</td>
                                             <td>{{ $solicitu->documento }}</td>
-                                            <td>{{ $solicitu->metodo_repuesta }}</td>
+                                            <td>{{ $solicitu->metodo_respuesta }}</td>
                                             <td>{{ $solicitu->respuesta }}</td>
                                             <td>{{ $solicitu->plazo_respuesta }}</td>
                                             <td>{{ $solicitu->depe }}</td>
