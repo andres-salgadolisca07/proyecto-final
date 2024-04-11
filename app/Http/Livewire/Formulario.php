@@ -58,7 +58,7 @@ public function mount(){
             ]);
             $soli=new Solicitud ();
             $soli->name=$this->name;
-             $soli->iden=$this->iden;
+            $soli->iden=$this->iden;
             $soli->email=$this->email;
             $soli->tel=$this->tel;
             $soli->tipo_p=$this->tipo_p;

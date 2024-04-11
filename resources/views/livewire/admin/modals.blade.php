@@ -10,7 +10,7 @@
             <div class="modal-body">
                 <form>
                     <div class="row">
-                        
+
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label for="name" class="form-label">Nombre:</label>
@@ -49,19 +49,7 @@
                                 </select>
                             </div>
 
-                            @if ($opciones)
-                                <div class="mb-3">
-                                    <label for="opcion_id" class="form-label">Opción:</label>
-                                    <select id="opcion_id" wire:model="opcion_id" class="form-control">
-                                        <option value="">Seleccionar</option>
-                                        @foreach ($opciones as $id => $nombres)
-                                            <option value="{{ $id }}">{{ $nombres }}
-                                            </option>
-                                        @endforeach
-
-                                    </select>
-                                </div>
-                            @endif
+                        
 
 
                             <div class="mb-3">
@@ -84,15 +72,16 @@
                             <div class="mb-3">
                                 <label for="tipo_solicitud" class="form-label">Tipo de
                                     solicitud:</label>
-                                <select id="tipo_solicitud" wire:model="tipo_solicitud" class="form-control">
-                                    <option value="">Seleccionar</option>
-                                    <option value="P">Peticion</option>
-                                    <option value="Q">Quejas</option>
-                                    <option value="R">Reclamos</option>
-                                    <option value="S">Sugerencias</option>
-                                    <option value="I">Informativas</option>
-                                    <option value="D">Denuncias</option>
-
+                                <select id="tipo_solicitud" wire:model="tipo_solicitud" class="form-control" wire:change="$emit('tipoSolicitudChanged', $event.target.value)">
+                                <option value="">Seleccione</option>
+                                <option value="peticiones">Peticiones</option>
+                                <option value="quejas">Quejas</option>
+                                <option value="reclamos">Reclamos</option>
+                                <option value="sugerencias">Sugerencias</option>
+                                <option value="informativa">Informativa</option>
+                                <option value="denuncias">Denuncias</option>
+                                <option value="tutela">Tutela</option>
+                                <option value="querella">Querella</option>
                                 </select>
                             </div>
                             <div class="mb-3">
@@ -115,10 +104,8 @@
                                 <input type="file" id="documento" wire:model="documento" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label for="plazo_respuesta" class="form-label">Plazo de
-                                    respuesta:</label>
-                                <input type="text" id="plazo_respuesta" wire:model="plazo_respuesta"
-                                    class="form-control">
+                            <label for="plazo_respuesta">Plazo de Respuesta:</label>
+                            <input type="text" wire:model="plazo_respuesta" readonly>
                             </div>
 
                         </div>
@@ -254,10 +241,7 @@
                                 <input type="file" id="documento" wire:model="documento" class="form-control">
                             </div>
                             <div class="mb-3">
-                                <label for="plazo_respuesta" class="form-label">Plazo de
-                                    respuesta:</label>
-                                <input type="text" id="plazo_respuesta" wire:model="plazo_respuesta"
-                                    class="form-control">
+                            
                             </div>
 
                         </div>

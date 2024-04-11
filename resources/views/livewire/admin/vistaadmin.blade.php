@@ -77,7 +77,7 @@
                                         <th>Nombre Empresa</th>
                                         <th>Tipo De Solicitud</th>
                                         <th>Solicitud</th>
-                                        <th>Documento</th>
+                                        <th>Archivo</th>
                                         <th>Método De Respuesta</th>
                                         <th>Respuesta</th>
                                         <th>Plazo Respuesta</th>
