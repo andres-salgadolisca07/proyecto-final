@@ -33,6 +33,10 @@ Route::middleware([
     Route::get('/vistaadministrador', function () {
         return view('vistaadministrador');
     })->name('vistaadministrador');
+
+    Route::get('/registraralcaldia', function () {
+        return view('registraralcaldia');
+    })->name('registraralcaldia');
 });
 
 

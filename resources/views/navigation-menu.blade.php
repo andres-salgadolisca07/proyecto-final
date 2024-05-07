@@ -34,6 +34,10 @@
                         <x-nav-link href="{{ route('vistaadministrador') }}" :active="request()->routeIs('vistaadministrador')">
                             {{ __('Solicitudes') }}
                         </x-nav-link>
+
+                        <x-nav-link href="{{ route('registraralcaldia') }}" :active="request()->routeIs('registraralcaldia')">
+                            {{ __('Registrar') }}
+                        </x-nav-link>
                     </div>
 
                     <div class="hidden sm:flex sm:items-center sm:ml-6">

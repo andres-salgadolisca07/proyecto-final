@@ -217,6 +217,35 @@ class RegistrarAlcaldia extends Component
             Solicitud::where('id', $id)->delete();
         }
     }
+    public function opcionpersona (){
+        if ($this->tipo_p==='natural'){
+            $this->nom_empresa='';
+        }
+    }
+    public function tipoSolicitudChanged($tipo_solicitud)
+    {
+      
+        // Cambiar el plazo de respuesta según el tipo de solicitud seleccionado
+        switch ($tipo_solicitud) {
+            
+            case 'P':
+            case 'Q':
+            case 'E':
+            case 'S':
+                $this->plazo_respuesta = '16';
+                break;
+            case 'I':
+                $this->plazo_respuesta = 'no tiene tiempo'; // No hay tiempo definido para informativa
+                break;
+            case 'D':
+            case 'T':
+            case 'QU':
+                $this->plazo_respuesta = '2';
+                break;
+            default:
+                $this->plazo_respuesta = 'no tiene tiempo';
+        }
+    }
     public function exportarExcel()
     {
         $solicitudes = Solicitud::join('estados', 'estados.id', '=', 'solicitudes.estados_id')
