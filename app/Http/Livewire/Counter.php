@@ -7,6 +7,9 @@ use Livewire\WithFileUploads;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+
 
 class Counter extends Component
 {
@@ -31,8 +34,11 @@ class Counter extends Component
 
         ]);
         $validar['password']=Hash::make($validar['password']);
-        $user=User::create($validar);
-        $this->activeTab='login';
+        $user = User::create($validar);
+        $role = Role::where('name', 'ciudadano')->first();
+        $user->assignRole($role);
+        $this->activeTab = 'login';
+
 
     }
     public function login(){
@@ -42,10 +48,16 @@ class Counter extends Component
 
         ];
         if (Auth::attempt($validar)) {
-            return redirect()->intended('/vistaformulario');
+            $user = Auth::user();
+        
+            if ($user->hasAnyRole(['admin', 'despacho', 'recepcion', 'controlinterno', 'secretariadeplaneacion', 'secretariadegobierno', 'secretariadesalud', 'secretariadehacienda', 'secretariadesdrema', 'inspecciondepolicia', 'comisaria'])) {
+                return redirect()->intended('/dashboard');
+            } else {
+                return redirect()->intended('/vistaformulario');
+            }
+        } else {
+            session()->flash('error', 'Las credenciales no coinciden');
         }
-        else {
-            session()->flash('error',' Las creenciales no coinciden');
-        }
+        
     }
 }

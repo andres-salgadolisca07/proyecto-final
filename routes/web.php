@@ -24,19 +24,19 @@ Route::middleware([
 ])->group(function () {
     Route::get('/dashboard', function () {
         return view('dashboard');
-    })->name('dashboard');
+    })->middleware('role:admin|recepcion|despacho|controlinterno|secretariadeplaneacion|secretariadegobierno|secretariadesalud|secretariadehacienda|secretariadesdrema|inspecciondepolicia|comisaria')->name('dashboard');
 
     Route::get('/vistaformulario', function () {
         return view('vistaformulario');
-    })->name('vistaformulario');
+    })->middleware('role:admin|ciudadano')->name('vistaformulario');
 
     Route::get('/vistaadministrador', function () {
         return view('vistaadministrador');
-    })->name('vistaadministrador');
+    })->middleware('role:admin|recepcion|despacho|controlinterno|secretariadeplaneacion|secretariadegobierno|secretariadesalud|secretariadehacienda|secretariadesdrema|inspecciondepolicia|comisaria')->name('vistaadministrador');
 
     Route::get('/registraralcaldia', function () {
         return view('registraralcaldia');
-    })->name('registraralcaldia');
+    })->middleware('role:admin|recepcion')->name('registraralcaldia');
 });
 
 
